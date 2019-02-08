@@ -1,4 +1,4 @@
-# deors-demos-microservices
+# Openathon #1 - Accenture Technology Spain - Custom Software Engineering
 
 ## Microservices with Spring Boot, Spring Cloud and Netflix OSS
 
@@ -7,6 +7,8 @@ Demonstration of an exemplar microservices stack based in Spring Boot, Spring Cl
 This demo is organised in iterations, starting from the basics and building up in complexity and features along the way.
 
 NOTE: The following instructions are created on a Windows machine, hence some commands may need slight adjustments when working on Linux/OSX, e.g. replace `%ENV_VAR%` by `${ENV_VAR}`, and replace back-slashes by forward-slashes.
+
+NOTE: This repo is adapted from https://github.com/deors/deors-demos-microservices and the exemplar solution files do not match the namespaces in the instructions below. (TBF)
 
 ## Iteration 1) The basics
 
@@ -61,9 +63,9 @@ Initialise the Git repository:
     git add .
     git commit -m "initial configuration"
 
-Publish it to any remote repository online (replace the actual URL with your own repository):
+Publish it to any remote repository online (replace the actual URL with your own online repository):
 
-    git remote add origin https://github.com/deors/deors-demos-microservices-configstore.git
+    git remote add origin https://github.com/my-org/my-repo.git
     git push origin master
 
 It is also possible to use the local repository, without pushing it to a remote repository. A local repository is enough to test services locally (Iteration 1), but a remote repository will be needed later, as services are distributed across multiple nodes and hence the local repository might not be accessible to every service instance.
@@ -74,7 +76,7 @@ The configuration service, powered by Spring Cloud Config Server, is the microse
 
 Go to `https://start.spring.io/` and create the project with the following settings:
 
-    group: deors.demos.microservices
+    group: cse.openathon.microservices
     artifact: configservice
     depedencies:
         actuator
@@ -94,14 +96,14 @@ Next, let's add the application name and set the configuration store location. E
 
     server.port = ${PORT:8888}
     spring.application.name = configservice
-    spring.cloud.config.server.git.uri = ${CONFIG_REPO_URL:https://github.com/deors/deors-demos-microservices-configstore.git}
+    spring.cloud.config.server.git.uri = ${CONFIG_REPO_URL:https://github.com/my-org/my-repo.git}
     management.security.enabled = false
 
 If the configuration store is local, leverage the File protocol in Git:
 
     spring.cloud.config.server.git.uri = ${CONFIG_REPO_URL:file:///%HOME%/microservices/configstore}
 
-To configure the configuration server to start automatically, edit `src\main\java\deors\demos\microservices\configservice\ConfigserviceApplication.java` and add the following class annotation:
+To configure the configuration server to start automatically, edit `src\main\java\cse\openathon\microservices\configservice\ConfigserviceApplication.java` and add the following class annotation:
 
 ```java
 @org.springframework.cloud.config.server.EnableConfigServer
@@ -113,7 +115,7 @@ The service registry and discovery service, powered by Spring Cloud and Netflix 
 
 Go to `https://start.spring.io/` and create the project with the following settings:
 
-    group: deors.demos.microservices
+    group: cse.openathon.microservices
     artifact: eurekaservice
     depedencies:
         actuator
@@ -137,7 +139,7 @@ Edit `src\main\resources\bootstrap.properties`:
     spring.application.name = eurekaservice
     spring.cloud.config.uri = http://${CONFIG_HOST:localhost}:${CONFIG_PORT:8888}
 
-To configure the Eureka server to start automatically, edit `src\main\java\deors\demos\microservices\eurekaservice\EurekaserviceApplication.java` and add the following class annotation:
+To configure the Eureka server to start automatically, edit `src\main\java\cse\openathon\microservices\eurekaservice\EurekaserviceApplication.java` and add the following class annotation:
 
 ```java
 @org.springframework.cloud.netflix.eureka.server.EnableEurekaServer
@@ -149,7 +151,7 @@ The circuit breaker dashboard, powered by Spring Cloud and Netflix Hystrix, will
 
 Go to `https://start.spring.io/` and create the project with the following settings:
 
-    group: deors.demos.microservices
+    group: cse.openathon.microservices
     artifact: hystrixservice
     depedencies:
         actuator
@@ -174,7 +176,7 @@ Edit `src\main\resources\bootstrap.properties`:
     spring.application.name = hystrixservice
     spring.cloud.config.uri = http://${CONFIG_HOST:localhost}:${CONFIG_PORT:8888}
 
-To configure the Hystrix dashboard to start automatically, edit `src\main\java\deors\demos\microservices\hystrixservice\HystrixserviceApplication.java` and add the following class annotations:
+To configure the Hystrix dashboard to start automatically, edit `src\main\java\cse\openathon\microservices\hystrixservice\HystrixserviceApplication.java` and add the following class annotations:
 
 ```java
 @org.springframework.cloud.client.discovery.EnableDiscoveryClient
@@ -187,7 +189,7 @@ This is the first microservice with actual functionality on the application func
 
 Go to `https://start.spring.io/` and create the project with the following settings:
 
-    group: deors.demos.microservices
+    group: cse.openathon.microservices
     artifact: bookrecservice
     depedencies:
         actuator
@@ -216,7 +218,7 @@ Edit `src\main\resources\bootstrap.properties`:
     spring.application.name = bookrecservice
     spring.cloud.config.uri = http://${CONFIG_HOST:localhost}:${CONFIG_PORT:8888}
 
-To configure the service to be discoverable, edit `src\main\java\deors\demos\microservices\bookrecservice\BookrecserviceApplication.java` and add the class annotation:
+To configure the service to be discoverable, edit `src\main\java\cse\openathon\microservices\bookrecservice\BookrecserviceApplication.java` and add the class annotation:
 
 ```java
 @org.springframework.cloud.client.discovery.EnableDiscoveryClient
@@ -296,7 +298,7 @@ The bookrec edge service is used by clients to interact with the bookrec service
 
 Go to `https://start.spring.io/` and create the project with the following settings:
 
-    group: deors.demos.microservices
+    group: cse.openathon.microservices
     artifact: bookrecedgeservice
     depedencies:
         actuator
@@ -323,7 +325,7 @@ Edit `src\main\resources\bootstrap.properties`:
     spring.application.name = bookrecedgeservice
     spring.cloud.config.uri = http://${CONFIG_HOST:localhost}:${CONFIG_PORT:8888}
 
-To configure the service to be discoverable (Eureka) and to use the circuit breaker (Hystrix), edit `src\main\java\deors\demos\microservices\bookrecedgeservice\BookrecedgeserviceApplication.java` and add the following class annotations:
+To configure the service to be discoverable (Eureka) and to use the circuit breaker (Hystrix), edit `src\main\java\cse\openathon\microservices\bookrecedgeservice\BookrecedgeserviceApplication.java` and add the following class annotations:
 
 ```java
 @org.springframework.cloud.client.discovery.EnableDiscoveryClient
@@ -551,7 +553,7 @@ Let's proceed with bookrec service as an example. Change to its directory:
 Edit `pom.xml` and add inside `<properties>` the following property:
 
 ```xml
-    <docker.image.prefix>deors</docker.image.prefix>
+    <docker.image.prefix>cse</docker.image.prefix>
 ```
 
 Add inside `<build><plugins>` Spotify's Docker Maven plug-in configuration:
@@ -588,7 +590,7 @@ Create the file `src\main\docker\Dockerfile` and add the following content:
 
     FROM frolvlad/alpine-oraclejdk8:slim
     VOLUME /tmp
-    ADD deors-demos-microservices-bookrecservice-0.0.1-SNAPSHOT.jar app.jar
+    ADD cse-openathon-microservices-bookrecservice-0.0.1-SNAPSHOT.jar app.jar
     ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
 
 Repeat for the other microservices (don't forget to update Jar file name in ADD command).
@@ -621,27 +623,27 @@ The first step is to create an overlay network for all the services:
 
 Once the network is ready, launch configservice and check the status:
 
-    docker service create -p 8888:8888 --name configservice --network microdemonet deors/deors-demos-microservices-configservice:latest
+    docker service create -p 8888:8888 --name configservice --network microdemonet cse/cse-openathon-microservices-configservice:latest
     docker service ps configservice
 
 Next, launch eurekaservice and check the status:
 
-    docker service create -p 7878:7878 --name eurekaservice --network microdemonet -e "CONFIG_HOST=configservice" deors/deors-demos-microservices-eurekaservice:latest
+    docker service create -p 7878:7878 --name eurekaservice --network microdemonet -e "CONFIG_HOST=configservice" cse/cse-openathon-microservices-eurekaservice:latest
     docker service ps eurekaservice
 
 Once eurekaservice is ready to accept other service registrations, launch hystrixservice and check the status:
 
-    docker service create -p 7979:7979 --name hystrixservice --network microdemonet -e "CONFIG_HOST=configservice" -e "EUREKA_HOST=eurekaservice" deors/deors-demos-microservices-hystrixservice:latest
+    docker service create -p 7979:7979 --name hystrixservice --network microdemonet -e "CONFIG_HOST=configservice" -e "EUREKA_HOST=eurekaservice" cse/cse-openathon-microservices-hystrixservice:latest
     docker service ps hystrixservice
 
 Launch bookrecservice and check the status:
 
-    docker service create -p 8080:8080 --name bookrecservice --network microdemonet -e "CONFIG_HOST=configservice" -e "EUREKA_HOST=eurekaservice" deors/deors-demos-microservices-bookrecservice:latest
+    docker service create -p 8080:8080 --name bookrecservice --network microdemonet -e "CONFIG_HOST=configservice" -e "EUREKA_HOST=eurekaservice" cse/cse-openathon-microservices-bookrecservice:latest
     docker service ps bookrecservice
 
 And, finally, launch bookrecedgeservice and check the status:
 
-    docker service create -p 8181:8181 --name bookrecedgeservice --network microdemonet -e "CONFIG_HOST=configservice" -e "EUREKA_HOST=eurekaservice" deors/deors-demos-microservices-bookrecedgeservice:latest
+    docker service create -p 8181:8181 --name bookrecedgeservice --network microdemonet -e "CONFIG_HOST=configservice" -e "EUREKA_HOST=eurekaservice" cse/cse-openathon-microservices-bookrecedgeservice:latest
     docker service ps bookrecedgeservice
 
 To quickly check whether all services are up and their configuration, use this command:
@@ -698,7 +700,7 @@ Ask Docker to scale out the book recommendation service
 
 ### 2.8) Make and update and roll out the changes without service downtime
 
-Make some change and deploy a rolling update. For example change the text string returned by BookController class in file `src\main\java\deors\demos\microservices\BookController.java`:
+Make some change and deploy a rolling update. For example change the text string returned by BookController class in file `src\main\java\cse\openathon\microservices\BookController.java`:
 
 Rebuild and push the new image to the registry:
 
@@ -706,7 +708,7 @@ Rebuild and push the new image to the registry:
 
 Next, the change is deployed. A label is needed to ensure the new version of 'latest' image is downloaded from registry:
 
-    docker service update --container-label-add update_cause="change" --update-delay 30s --image deors/deors-demos-microservices-bookrecservice:latest bookrecservice
+    docker service update --container-label-add update_cause="change" --update-delay 30s --image cse/cse-openathon-microservices-bookrecservice:latest bookrecservice
 
 To check how the change is being deployed, issue this command repeatedly:
 
